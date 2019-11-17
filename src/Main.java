@@ -1,4 +1,5 @@
 
+import connection.FileFetch;
 import connection.FileRemove;
 import connection.FileUpload;
 import connection.HealthChecker;
@@ -16,6 +17,9 @@ public class Main {
         FileRemove fr1 = new FileRemove(Ports.REMOVE_1);
         FileRemove fr2 = new FileRemove(Ports.REMOVE_2);
 
+        FileFetch ff1 = new FileFetch(Ports.FETCH_1);
+        FileFetch ff2 = new FileFetch(Ports.FETCH_2);
+
         // Starting HealthCheckers Threads
         hc1.start();
         hc2.start();
@@ -27,5 +31,9 @@ public class Main {
         // Starting File Remove Threads
         fr1.start();
         fr2.start();
+
+        // Starting File Fetch Threads
+        ff1.start();
+        ff2.start();
     }
 }
