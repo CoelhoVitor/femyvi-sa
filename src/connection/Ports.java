@@ -1,7 +1,10 @@
 package connection;
 
 public enum Ports {
-    HEALTHCHECK(2000), DOWNLOAD(5000), REMOVE(5001);
+    HEALTHCHECK_1(4000),
+    HEALTHCHECK_2(4001),
+    DOWNLOAD(4002),
+    REMOVE(4003);
     
     private final int value;
     

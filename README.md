@@ -6,6 +6,7 @@ Servidor responsável pelo armazenamento das partes dos arquivos dos clientes.
 
  Porta | Função 
 -------|-----------
-| 2000 | HealthCheck |
-| 5000 | Download |
-| 5001 | Remove |
+| 4000 | HealthCheck1 |
+| 4001 | HealthCheck2 |
+| 4002 | Download |
+| 4003 | Remove |
