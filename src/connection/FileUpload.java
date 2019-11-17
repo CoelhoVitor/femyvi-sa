@@ -36,8 +36,10 @@ public class FileUpload extends Thread {
 
                 // write file
                 String serverNum = port == Ports.UPLOAD_1.getValue() ? "1" : "2";
-                String filePath = serverNum + "/" + fm.getOwner() + "/" + fm.getFilename() + "_" + serverNum;
+                String filePath = serverNum + "/" + fm.getOwner() + "/" + fm.getFilename() + "." + fm.getFileType();
                 File f = new File(filePath);
+                f.getParentFile().mkdirs();
+                f.createNewFile();
                 Files.write(Paths.get(f.getAbsolutePath()), fm.getContent());
             }
         } catch (IOException ex) {
