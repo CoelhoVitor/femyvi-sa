@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import model.FileMessage;
 
 public class FileMessageSocket {
@@ -14,6 +15,12 @@ public class FileMessageSocket {
         OutputStream outputStream = socket.getOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         objectOutputStream.writeObject(fm);
+    }
+
+    public void sendFileMessageList(Socket socket, ArrayList<FileMessage> fms) throws IOException {
+        OutputStream outputStream = socket.getOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        objectOutputStream.writeObject(fms);
     }
 
     public FileMessage receiveFileMessage(Socket socket) throws IOException, ClassNotFoundException {
