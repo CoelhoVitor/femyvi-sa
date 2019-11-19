@@ -35,16 +35,19 @@ public class FileFetch extends Thread {
                 System.out.println(um.toString());
 
                 // read files
-                String serverNum = port == Ports.UPLOAD_1.getValue() ? "1" : "2";
-                String filePath = serverNum + "/" + um.getLogin();
+                String serverNum = port == Ports.FETCH_1.getValue() ? "1" : "2";
+                String filePath = serverNum + "/" + um.getLogin() + "/";
                 File folder = new File(filePath);
                 File[] files = folder.listFiles();
 
                 ArrayList<FileMessage> fileMessages = new ArrayList<>();
-                for (File f : files) {
-                    fileMessages.add(FileUtils.fileToFileMessage(f));
+                if (files == null) {
+                    folder.mkdirs();
+                } else {
+                    for (File f : files) {
+                        fileMessages.add(FileUtils.fileToFileMessage(f));
+                    }
                 }
-
                 fileMessageSocket.sendFileMessageList(socket, fileMessages);
 
                 socket.close();
