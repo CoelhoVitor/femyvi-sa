@@ -35,8 +35,8 @@ public class FileRemove extends Thread {
                 server.close();
 
                 // remove file
-                String serverNum = port == Ports.UPLOAD_1.getValue() ? "1" : "2";
-                String filePath = serverNum + "/" + fm.getOwner() + "/" + fm.getFilename() + "_" + serverNum;
+                String serverNum = port == Ports.REMOVE_1.getValue() ? "1" : "2";
+                String filePath = serverNum + "/" + fm.getOwner() + "/" + fm.getFilename() + "." + fm.getFileType();
                 File f = new File(filePath);
                 Files.delete(Paths.get(f.getAbsolutePath()));
             }
