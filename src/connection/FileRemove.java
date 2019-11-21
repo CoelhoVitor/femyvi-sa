@@ -1,13 +1,18 @@
 package connection;
 
+import com.sun.net.ssl.internal.ssl.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Security;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 import model.FileMessage;
 
 public class FileRemove extends Thread {
@@ -23,11 +28,17 @@ public class FileRemove extends Thread {
     @Override
     public void run() {
         try {
+            Security.addProvider(new Provider());
+            System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
+            System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
+            System.setProperty("javax.net.ssl.trustStore", "sakeystore.ks");
+            SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+
             while (true) {
                 // receive file from SG
-                ServerSocket server = new ServerSocket(port);
+                SSLServerSocket server = (SSLServerSocket) sslServerSocketfactory.createServerSocket(port);
                 System.out.println("File Remove iniciado na porta " + port);
-                Socket socket = server.accept();
+                SSLSocket socket = (SSLSocket) server.accept();
                 FileMessage fm = fileMessageSocket.receiveFileMessage(socket);
                 System.out.println(fm.toString());
 

@@ -1,14 +1,19 @@
 package connection;
 
+import com.sun.net.ssl.internal.ssl.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.Security;
 import model.FileMessage;
 import model.UserMessage;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 import util.FileUtils;
 
 public class FileFetch extends Thread {
@@ -26,11 +31,17 @@ public class FileFetch extends Thread {
     @Override
     public void run() {
         try {
+            Security.addProvider(new Provider());
+            System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
+            System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
+            System.setProperty("javax.net.ssl.trustStore", "sakeystore.ks");
+            SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+
             while (true) {
                 // receive user from SG
-                ServerSocket server = new ServerSocket(port);
+                SSLServerSocket server = (SSLServerSocket) sslServerSocketfactory.createServerSocket(port);
+                SSLSocket socket = (SSLSocket) server.accept();   
                 System.out.println("File Fetch iniciado na porta " + port);
-                Socket socket = server.accept();
                 UserMessage um = userMessageSocket.receiveUserMessage(socket);
                 System.out.println(um.toString());
 
