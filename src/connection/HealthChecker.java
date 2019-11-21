@@ -26,25 +26,25 @@ public class HealthChecker extends Thread {
 
     @Override
     public void run() {
-        try {
-            System.out.println("Healthcheck iniciado na porta " + port);
+        Security.addProvider(new Provider());
+        System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
 
-            Security.addProvider(new Provider());
-            System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
-            System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
-            SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+        while (true) {
+            try {
+                System.out.println("Healthcheck iniciado na porta " + port);
 
-            do {
+                SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+
                 SSLServerSocket server = (SSLServerSocket) sslServerSocketfactory.createServerSocket(port);
                 SSLSocket client = (SSLSocket) server.accept();
                 System.out.println("Cliente conectado do IP " + client.getInetAddress().getHostAddress());
                 handleClient(client.getOutputStream());
                 client.close();
                 server.close();
-            } while (true);
-
-        } catch (IOException ex) {
-            Logger.getLogger(HealthChecker.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(HealthChecker.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

@@ -27,14 +27,15 @@ public class FileRemove extends Thread {
 
     @Override
     public void run() {
-        try {
-            Security.addProvider(new Provider());
-            System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
-            System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
-            System.setProperty("javax.net.ssl.trustStore", "sakeystore.ks");
-            SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 
-            while (true) {
+        Security.addProvider(new Provider());
+        System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
+        System.setProperty("javax.net.ssl.trustStore", "sakeystore.ks");
+        SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+
+        while (true) {
+            try {
                 // receive file from SG
                 SSLServerSocket server = (SSLServerSocket) sslServerSocketfactory.createServerSocket(port);
                 System.out.println("File Remove iniciado na porta " + port);
@@ -50,10 +51,11 @@ public class FileRemove extends Thread {
                 String filePath = serverNum + "/" + fm.getOwner() + "/" + fm.getFilename() + "." + fm.getFileType();
                 File f = new File(filePath);
                 Files.delete(Paths.get(f.getAbsolutePath()));
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
 }

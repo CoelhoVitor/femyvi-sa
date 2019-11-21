@@ -30,17 +30,18 @@ public class FileFetch extends Thread {
 
     @Override
     public void run() {
-        try {
-            Security.addProvider(new Provider());
-            System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
-            System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
-            System.setProperty("javax.net.ssl.trustStore", "sakeystore.ks");
-            SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 
-            while (true) {
+        Security.addProvider(new Provider());
+        System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
+        System.setProperty("javax.net.ssl.trustStore", "sakeystore.ks");
+        SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+
+        while (true) {
+            try {
                 // receive user from SG
                 SSLServerSocket server = (SSLServerSocket) sslServerSocketfactory.createServerSocket(port);
-                SSLSocket socket = (SSLSocket) server.accept();   
+                SSLSocket socket = (SSLSocket) server.accept();
                 System.out.println("File Fetch iniciado na porta " + port);
                 UserMessage um = userMessageSocket.receiveUserMessage(socket);
                 System.out.println(um.toString());
@@ -63,12 +64,13 @@ public class FileFetch extends Thread {
 
                 socket.close();
                 server.close();
+            } catch (IOException ex) {
+                Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
 }

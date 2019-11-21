@@ -25,12 +25,13 @@ public class FileUpload extends Thread {
 
     @Override
     public void run() {
-        try {
-            System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
-            System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
-            SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+        System.setProperty("javax.net.ssl.keyStore", "sakeystore.ks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "femyvi-sa");
+        SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 
-            while (true) {
+        while (true) {
+            try {
+
                 // receive file from SG
                 SSLServerSocket server = (SSLServerSocket) sslServerSocketfactory.createServerSocket(port);
                 System.out.println("File Upload iniciado na porta " + port);
@@ -48,11 +49,11 @@ public class FileUpload extends Thread {
                 f.getParentFile().mkdirs();
                 f.createNewFile();
                 Files.write(Paths.get(f.getAbsolutePath()), fm.getContent());
+            } catch (IOException ex) {
+                Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
